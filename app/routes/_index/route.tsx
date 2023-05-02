@@ -1,7 +1,6 @@
 import type { LoaderArgs } from '@remix-run/cloudflare'
 import { json } from '@remix-run/cloudflare'
 import { useLoaderData } from '@remix-run/react'
-import { encase } from 'pratica'
 
 import { Hero } from './components/hero'
 import { config } from '~/config'
@@ -12,14 +11,16 @@ export const loader = async ({ context }: LoaderArgs) => {
 	const { services } = context
 
 	const featured = await services.woocommerce.findFeaturedProducts()
+	const categories = await services.woocommerce.findProductsCategories('top')
 
 	return json({
 		featured,
+		categories,
 	})
 }
 
 export default function IndexLayout() {
-	const { featured } = useLoaderData<typeof loader>()
+	const { featured, categories } = useLoaderData<typeof loader>()
 
 	return (
 		<main className="bg-orange-50">
@@ -59,7 +60,7 @@ export default function IndexLayout() {
 						name: f.name,
 						price: f.price.amount,
 						currency: f.price.currency,
-						url: `${config.menu['shop']}/${f.slug}`,
+						url: `${config.menu['shop'].path}/${f.slug}`,
 						image: f.images[0],
 					}))}
 				/>
@@ -81,7 +82,14 @@ export default function IndexLayout() {
 				</p>
 			</section>
 
-			<FeaturedCategories />
+			<FeaturedCategories
+				categories={categories.map(c => ({
+					name: c.name,
+					description: c.description,
+					image: c.image,
+					url: `categories/${c.slug}`,
+				}))}
+			/>
 		</main>
 	)
 }

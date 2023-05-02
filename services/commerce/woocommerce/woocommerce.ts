@@ -1,11 +1,14 @@
 import { head } from 'pratica'
 import type {
+	Category,
 	CommerceService,
 	PaginationOptions,
 	Product,
+	TopCategory,
 } from 'services/commerce/concepts'
 import type {
 	PublishedWooCommerceProduct,
+	WooCommerceCategory,
 	WooCommerceProduct,
 } from 'services/commerce/woocommerce/types'
 
@@ -36,6 +39,7 @@ function toProduct(p: WooCommerceProduct): Product {
 
 const FEATURED_PRODUCTS_NUMBER = 4
 const productsEndpoint = 'products'
+const categoriesEndpoint = 'products/categories'
 
 export class WooCommerceService implements CommerceService {
 	/** Just a configured fetch to have auth headers for each call */
@@ -98,8 +102,6 @@ export class WooCommerceService implements CommerceService {
 			`${productsEndpoint}?featured=true`,
 		)
 
-		console.log(featuredWooProducts)
-
 		const areFeaturedProductsEnough =
 			featuredWooProducts.length >= FEATURED_PRODUCTS_NUMBER
 
@@ -114,5 +116,30 @@ export class WooCommerceService implements CommerceService {
 		)
 
 		return undefined
+	}
+
+	/**
+	 * Find product categories, `level` param allow us to get only top-level categories
+	 * * It doesn't return empty categories, if necessary remove the query param `hide_empty`.
+	 */
+	findProductsCategories = async (
+		level: 'top' | 'all' = 'all',
+	): Promise<Category[]> => {
+		const query = level === 'all' ? '' : 'parent=0'
+
+		const wooTopLevelCategories = await this.fetcher<WooCommerceCategory[]>(
+			`${categoriesEndpoint}?hide_empty=true&${query}`,
+		)
+
+		const topLevelCategories: TopCategory[] = wooTopLevelCategories.map(c => ({
+			id: c.id,
+			name: c.name,
+			description: c.description,
+			slug: c.slug,
+			image: c.image,
+			level: 'top',
+		}))
+
+		return topLevelCategories
 	}
 }

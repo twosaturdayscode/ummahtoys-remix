@@ -7,7 +7,7 @@ type ProductPrice = {
 	currency: '€'
 }
 
-type ProductImage = {
+type Image = {
 	id: string
 	src: string
 	name: string
@@ -20,8 +20,30 @@ export type Product = {
 	description: string
 	slug: string
 	price: ProductPrice
-	images: ProductImage[]
+	images: Image[]
 }
+
+export type TopCategory = {
+	id: string
+	name: string
+	description: string
+	slug: string
+	image: Image
+	level: 'top' // Indicates that it's a top-level categorys
+}
+
+export type SubCategory = {
+	id: string
+	name: string
+	description: string
+	slug: string
+	image: Image
+	level: 'sub' // Indicates that it's a subcategory
+	/** The id of the parent category */
+	parentId: string
+}
+
+export type Category = TopCategory | SubCategory
 
 export interface PaginationOptions {
 	page?: number
@@ -33,4 +55,5 @@ export interface CommerceService {
 	findProducts(opts?: PaginationOptions): Promise<Product[]>
 	findProductBySlug(slug: string): Promise<Product>
 	findFeaturedProducts(): Promise<Product[] | undefined>
+	findProductsCategories(level: 'top' | 'all'): Promise<Category[]>
 }

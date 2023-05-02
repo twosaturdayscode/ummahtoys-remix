@@ -53,7 +53,7 @@ export type WooCommerceProduct = {
 	purchase_note: string //Optional note to send the customer after purchase.
 	categories: CategoryProperties[] //List of categories. See Product - Categories properties
 	tags: TagProperties[] //List of tags. See Product - Tags properties
-	images: ImageProperties[] //List of images. See Product - Images properties
+	images: WooCommerceProductImage[] //List of images. See Product - Images properties
 	attributes: AttributesProperties[] //List of attributes. See Product - Attributes properties
 	default_attributes: DefaultAttributesProperties[] //Defaults variation attributes. See Product - Default attributes properties
 	variations: string[] //List of variations IDs.READ-ONLY
@@ -80,7 +80,7 @@ type TagProperties = {
 	slug: string //Category slug.
 }
 
-type ImageProperties = {
+type WooCommerceProductImage = {
 	id: string //Image ID.
 	date_created: Date //The date the image was created, in the site's timezone.READ-ONLY
 	date_created_gmt: Date //The date the image was created, as GMT.READ-ONLY
@@ -114,4 +114,16 @@ type ProductMetaData = {
 
 export type PublishedWooCommerceProduct = WooCommerceProduct & {
 	status: 'published'
+}
+
+export type WooCommerceCategory = {
+	id: string //	Unique identifier for the resource.READ-ONLY
+	name: string //	Category name.MANDATORY
+	slug: string //	An alphanumeric identifier for the resource unique to its type.
+	parent: number //	The ID for the parent of the resource. 0 if no parent
+	description: string // HTML description of the resource.
+	display: string // Category archive display type. Options: default, products, subcategories and both. Default is default.
+	image: WooCommerceProductImage // Image data. See Product category - Image properties
+	menu_order: number //	Menu order, used to custom sort the resource.
+	count: number //	Number of published products for the resource.
 }

@@ -5,11 +5,11 @@ export const config = {
 			path: '/',
 		},
 		shop: {
-			label: 'shop',
+			label: 'negozio',
 			path: 'shop',
 		},
 		about: {
-			label: 'Chi siamo',
+			label: 'chi siamo',
 			path: '/chi-siamo',
 		},
 	},

@@ -10,10 +10,10 @@ export function Header() {
 
 	return (
 		<div className="sticky top-0 z-20 flex w-full flex-col items-center justify-center">
-			<header className="animate-fade-in relative flex h-[4.5rem] w-full shrink-0 items-center justify-between border-b-2 border-stone-400 border-opacity-20 bg-orange-50 bg-opacity-80 px-4 backdrop-blur-md sm:px-8 md:h-[5.5rem] md:justify-start md:gap-16">
+			<header className="animate-fade-in relative flex w-full shrink-0 flex-col items-center justify-evenly gap-3 border-b-2 border-stone-400 border-opacity-20 bg-orange-50 bg-opacity-80 px-4 py-5 backdrop-blur-md sm:px-8 md:justify-start">
 				<Link
 					to="/"
-					className="flex items-center outline-none transition-colors duration-200 hover:text-stone-600"
+					className="flex h-full items-center outline-none transition-colors duration-200 hover:text-stone-600"
 					aria-label="Ummahtoys"
 				>
 					{/* <img
@@ -26,10 +26,10 @@ export function Header() {
 					</span>
 				</Link>
 
-				<div className="z-10 flex items-center">
+				<div className="z-10 flex h-full items-center justify-center">
 					<MenuButton />
 
-					<ul className="hidden w-full gap-5 md:mr-20 md:flex">
+					<ul className="hidden w-full justify-around gap-5 md:flex">
 						{menu.map(([key, { path, label }]) => (
 							<NavItem key={key} to={path} end={path === '/'}>
 								<span className="capitalize">{label}</span>
